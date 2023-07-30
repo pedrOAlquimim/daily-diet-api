@@ -1,0 +1,26 @@
+{
+  "name": "daily-diet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "Pedro Alquimim",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.21.0"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
+    "@types/node": "^20.4.5",
+    "eslint": "^8.46.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  }
+}
