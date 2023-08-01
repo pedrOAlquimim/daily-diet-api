@@ -6,6 +6,10 @@ export const knexConfig: Knex.Config = {
   connection: {
     filename: env.DATABASE_FILE,
   },
+  useNullAsDefault: true,
+  migrations: {
+    extension: 'ts',
+  },
 }
 
 export const knex = setupKnex(knexConfig)
