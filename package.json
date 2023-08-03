@@ -15,6 +15,7 @@
   "author": "Pedro Alquimim",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^9.0.1",
     "dotenv": "^16.3.1",
     "fastify": "^4.21.0",
     "knex": "^2.5.1",

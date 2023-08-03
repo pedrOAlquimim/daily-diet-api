@@ -12,12 +12,37 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { email, password, username } = requestBodySchema.parse(request.body)
 
+    const userAlreadyExists = await knex('users')
+      .where('email', email)
+      .orWhere('username', username)
+      .first()
+
+    if (userAlreadyExists) {
+      return reply.status(400).send({
+        message: 'Email or username already taken.',
+      })
+    }
+
     await knex('users').insert({
       email,
       password,
       username,
     })
 
-    reply.status(201).send()
+    const user = await knex('users')
+      .where('email', email)
+      .orWhere('username', username)
+      .first()
+
+    if (!user?.id) {
+      return null
+    }
+
+    reply
+      .cookie('@Daily-diet/userId', user.id, {
+        path: '/',
+      })
+      .status(201)
+      .send()
   })
 }
