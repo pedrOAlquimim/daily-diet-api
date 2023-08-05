@@ -39,7 +39,7 @@ export async function usersRoutes(app: FastifyInstance) {
     }
 
     reply
-      .cookie('@Daily-diet/userId', user.id, {
+      .cookie('daily_diet_userId', user.id, {
         path: '/',
       })
       .status(201)
