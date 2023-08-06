@@ -80,4 +80,33 @@ export async function mealsRoute(app: FastifyInstance) {
       reply.status(201).send()
     },
   )
+
+  app.delete(
+    '/:id',
+    { preHandler: [userIdCookieExists] },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const requestParamsSchema = z.object({
+        id: z.string(),
+      })
+
+      const { id } = requestParamsSchema.parse(request.params)
+
+      const cookieUserId = request.cookies.daily_diet_userId
+
+      const user = await knex('users').select('*').where('id', cookieUserId)
+
+      if (!user) {
+        return reply.status(401).send({
+          error: 'Unauthorized',
+        })
+      }
+
+      await knex('meals')
+        .delete('*')
+        .where('id', id)
+        .andWhere('user_id', cookieUserId)
+
+      reply.status(200).send()
+    },
+  )
 }
