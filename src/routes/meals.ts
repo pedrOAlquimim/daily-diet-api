@@ -19,6 +19,28 @@ export async function mealsRoute(app: FastifyInstance) {
     },
   )
 
+  app.get(
+    '/:id',
+    { preHandler: [userIdCookieExists] },
+    async (request: FastifyRequest) => {
+      const requestParamsSchema = z.object({
+        id: z.string().uuid(),
+      })
+
+      const { id } = requestParamsSchema.parse(request.params)
+
+      const cookieUserId = request.cookies.daily_diet_userId
+
+      const meal = await knex('meals')
+        .select('*')
+        .where('user_id', cookieUserId)
+        .andWhere('id', id)
+        .first()
+
+      return meal
+    },
+  )
+
   app.post(
     '/',
     { preHandler: [userIdCookieExists] },
@@ -58,7 +80,7 @@ export async function mealsRoute(app: FastifyInstance) {
     { preHandler: [userIdCookieExists] },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const requestParamsSchema = z.object({
-        id: z.string(),
+        id: z.string().uuid(),
       })
 
       const { id } = requestParamsSchema.parse(request.params)
@@ -100,7 +122,7 @@ export async function mealsRoute(app: FastifyInstance) {
     { preHandler: [userIdCookieExists] },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const requestParamsSchema = z.object({
-        id: z.string(),
+        id: z.string().uuid(),
       })
 
       const { id } = requestParamsSchema.parse(request.params)
