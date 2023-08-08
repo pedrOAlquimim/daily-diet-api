@@ -41,6 +41,20 @@ export async function mealsRoute(app: FastifyInstance) {
     },
   )
 
+  app.get(
+    '/summary',
+    { preHandler: [userIdCookieExists] },
+    async (request: FastifyRequest) => {
+      const cookieUserId = request.cookies.daily_diet_userId
+
+      const meals = await knex('meals')
+        .select('*')
+        .where('user_id', cookieUserId)
+
+      return meals.length
+    },
+  )
+
   app.post(
     '/',
     { preHandler: [userIdCookieExists] },
