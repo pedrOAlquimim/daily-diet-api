@@ -51,7 +51,21 @@ export async function mealsRoute(app: FastifyInstance) {
         .select('*')
         .where('user_id', cookieUserId)
 
-      return meals.length
+      const mealsOnTheDiet = await knex('meals')
+        .select('*')
+        .where('user_id', cookieUserId)
+        .andWhere('is_on_the_diet', true)
+
+      const mealsIsNotOnTheDiet = await knex('meals')
+        .select('*')
+        .where('user_id', cookieUserId)
+        .andWhere('is_on_the_diet', false)
+
+      return {
+        meals: meals.length,
+        onTheDiet: mealsOnTheDiet.length,
+        isNotOnTheDiet: mealsIsNotOnTheDiet.length,
+      }
     },
   )
 
